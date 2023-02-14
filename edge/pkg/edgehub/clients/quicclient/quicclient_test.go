@@ -47,7 +47,7 @@ func init() {
 	}
 }
 
-func newTestQuicClient(api string, certPath string, keyPath string, cacertPath string) *QuicClient {
+func newTestQuicClient(certPath string, keyPath string, cacertPath string) *QuicClient {
 	return &QuicClient{
 		config: &QuicConfig{
 			Addr:             net.JoinHostPort("127.0.0.1", "10001"),
@@ -156,12 +156,12 @@ func TestInit(t *testing.T) {
 	}{
 		{
 			name:          "QuicClient with valid config",
-			client:        newTestQuicClient("success", "/tmp/edge.crt", "/tmp/edge.key", "/tmp/edge.crt"),
+			client:        newTestQuicClient("/tmp/edge.crt", "/tmp/edge.key", "/tmp/edge.crt"),
 			expectedError: nil,
 		},
 		{
 			name:          "QuicClient with invalid cert and key",
-			client:        newTestQuicClient("fail", "/tmp/invalid/edge.crt", "/tmp/invalid/edge.key", "/tmp/invalid/edge.crt"),
+			client:        newTestQuicClient("/tmp/invalid/edge.crt", "/tmp/invalid/edge.key", "/tmp/invalid/edge.crt"),
 			expectedError: nil,
 		},
 	}
@@ -195,7 +195,7 @@ func TestSend(t *testing.T) {
 	}{
 		{
 			name:          "Test sending small message",
-			fields:        newTestQuicClient("normal", "/tmp/edge.crt", "/tmp/edge.key", "/tmp/edge.crt"),
+			fields:        newTestQuicClient("/tmp/edge.crt", "/tmp/edge.key", "/tmp/edge.crt"),
 			message:       msg,
 			expectedError: nil,
 		},
@@ -234,7 +234,7 @@ func TestReceive(t *testing.T) {
 		expectedError error
 	}{
 		{name: "Test Receiving the send message: Success in receiving",
-			fields:        newTestQuicClient("normal", "/tmp/edge.crt", "/tmp/edge.key", "/tmp/edge.crt"),
+			fields:        newTestQuicClient("/tmp/edge.crt", "/tmp/edge.key", "/tmp/edge.crt"),
 			want:          msg,
 			sent:          msg,
 			expectedError: nil,
